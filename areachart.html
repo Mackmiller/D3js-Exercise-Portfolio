@@ -110,13 +110,6 @@
               .domain(d3.extent(data, function(d) { return d.Close }))
               .range([(h - margin.top - margin.bottom), 0])
 
-
-
-            // THIS is the main difference between a line chart and an area
-            // chart: The area chart uses the area() method and includes a
-            // method which sets up the y0 value -- use the first data
-            // point in the yScale range. (Also, change the style for this
-            // line to have a fill. See the stylesheet above for details.)
             var line = d3.area()
               .x(function(d) { return xScale(d.Date) })
               .y0(function(d) { return yScale.range()[0]; })
@@ -211,9 +204,6 @@
                              return d.Close;
                            }
                          });
-
-
-
 
                          svg.append("line")
                               .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
