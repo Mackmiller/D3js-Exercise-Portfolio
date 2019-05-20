@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercise Portfolio</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+
+    <header>
+      <!-- ADD YOUR NAME -->
+      <h1>YOUR NAME: Exercise Portfolio</h1>
+    </header>
+
+    <div id="content">
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Return to Main Page</a></li>
+        </ul>
+      </nav>
+
+      <main>
+
+        <h2>Bar Chart</h2>
+
+        <p> This graph visualizes the seasonal wins of the Major League Baseball teams, from highest number of wins to lowest number of wins. The bar chart is displayed vertically to allow better mobile compatability. </p>
+
+      </main>
+    </div>
+
+    <script src="js/d3.min.js"></script>
+    <script>
+        d3.csv("data/mlb-standings.csv")
+          .then(function(data) {
+            d3.select("body")
+              .selectAll("div")
+              .data(data)
+              .enter()
+              .append("div")
+              .text(function(d) { return d.team + ": " + d.w + " wins" })
+              .style("width", function(d) {
+                var multiplier = d.w * 3;
+                return multiplier + "px";
+              });
+
+          });
+
+
+      </script>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercise Portfolio</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+
+  <style>
+        .map {
+          width: 100%;
+          max-width: 1024px;
+          margin: 0 auto;
+        }
+        div {
+          background-color: white;
+        }
+      </style>
+
+
+
+  <body>
+
+    <header>
+      <!-- ADD YOUR NAME -->
+      <h1>MACKENZIE MILLER: Exercise Portfolio</h1>
+    </header>
+
+    <div id="content">
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Return to Main Page</a></li>
+        </ul>
+      </nav>
+
+      <main>
+
+        <h2>Choropleth Map</h2>
+
+        <p>This choropleth map displays the percentage of veterans in each state. Alaska has the highest percentage of veterans, at 11.9 percent.</p>
+
+        <!-- ADD YOUR VISUALIZATION HERE -->
+      </main>
+    </div>
+<div class="map"></div>
+    <script src="js/d3.min.js"></script>
+    <script>
+
+          d3.json("data/us-states.json").then(function(usMap) {
+            d3.csv("data/united-states-veterans.csv").then(function(data) {
+
+                var usaFeatures = usMap.features;
+
+                data.forEach(function(d) {
+                  var stateName = d.state;
+                  var population = +d.pop;
+
+                  usaFeatures.forEach(function(u) {
+                    var usaState = u.properties.name;
+                    if (usaState == stateName) {
+                      u.properties.pop = population;
+                    }
+                  });
+                });
+
+                var svg = d3.select(".map").append("svg");
+
+                var w = 900, h = 500;
+
+                svg.attr("width", w)
+                   .attr("height", h);
+
+                var projection = d3.geoAlbersUsa();
+
+                var path = d3.geoPath().projection(projection);
+
+                var colors = d3.scaleQuantize()
+                               .domain(d3.extent(usaFeatures, function(d) { return d.properties.pop; }))
+                               .range(["#e5f4e0", "#cae4c0", "#aacf9d",
+                                       "#87b476", "#6c9e5a", "#548741",
+                                       "#40722d", "#2e5c1d", "#1e4410",
+                                       "#102a07", "#071602"]);
+
+                svg.selectAll("path")
+                   .data(usaFeatures)
+                   .enter()
+                   .append("path")
+                   .attr("d", path)
+                   .attr("fill", function(d) {
+                     if(d.properties.pop) {
+                       return colors(d.properties.pop);
+                     } else {
+                       return "#ccc";
+                     }
+                   })
+                   .attr("stroke", "#fff")
+                   .attr("stroke-width", "2px");
+
+              });
+            });
+
+      </script>
+  </body>
+</html>

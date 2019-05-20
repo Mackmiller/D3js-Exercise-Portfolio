@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercise Portfolio</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+
+  <style>
+
+    body {
+        font: 10px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+
+    .focus circle {
+        fill: steelblue;
+    }
+
+    .focus text {
+        font-size: 14px;
+    }
+
+    .tooltip {
+        fill: white;
+        stroke: #000;
+    }
+
+    .tooltip-date, .tooltip-Close, .tooltip-High {
+        font-weight: bold;
+    }
+
+
+          .mean-line {
+            fill: none;
+            stroke: rgb(204,60,45);
+            stroke-dasharray: 4,4;
+          }
+
+</style>
+
+
+
+  <body>
+
+    <header>
+      <!-- ADD YOUR NAME -->
+      <h1>MACKENZIE MILLER: Exercise Portfolio</h1>
+    </header>
+
+    <div id="content">
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Return to Main Page</a></li>
+        </ul>
+      </nav>
+
+      <main>
+
+        <h2>Interactive Line Chart</h2>
+
+        <p>This interactive line chart displays the closing cost of Walt Disney Company stock from 1962 to 2019. </p>
+
+        <!-- ADD YOUR VISUALIZATION HERE -->
+      </main>
+    </div>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+  <script>
+
+      var margin = { top: 30, right: 120, bottom: 70, left: 50 },
+          width = 960 - margin.left - margin.right,
+          height = 500 - margin.top - margin.bottom,
+          tooltip = { width: 100, height: 100, x: 10, y: -30 };
+
+      var parseDate = d3.time.format("%Y-%m-%d").parse,
+          bisectDate = d3.bisector(function(d) { return d.date; }).left,
+          formatValue = d3.format(","),
+          dateFormatter2 = d3.time.format("%Y");
+          dateFormatter = d3.time.format("%b %Y");
+
+
+
+      var x = d3.time.scale()
+              .range([0, width]);
+
+      var y = d3.scale.linear()
+              .range([height, 0]);
+
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+          .tickFormat(dateFormatter2);
+
+      var yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("left")
+          .tickFormat(d3.format("s"))
+
+      var line = d3.svg.line()
+          .x(function(d) { return x(d.date); })
+          .y(function(d) { return y(d.Close); });
+
+      var svg = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      d3.csv("data/DIS.csv", function(error, data) {
+          if (error) throw error;
+
+          data.forEach(function(d) {
+              d.date = parseDate(d.date);
+              d.Close = +d.Close;
+          });
+
+          data.sort(function(a, b) {
+              return a.date - b.date;
+          });
+
+          x.domain([data[0].date, data[data.length - 1].date]);
+          y.domain(d3.extent(data, function(d) { return d.Close; }));
+
+          svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+
+          svg.append("g")
+              .attr("class", "y axis")
+              .call(yAxis)
+              .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", -40)
+              .attr("x", -160)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .text("Close Amount in Dollars");
+
+          svg.append("path")
+              .datum(data)
+              .attr("class", "line")
+              .attr("d", line);
+
+          var focus = svg.append("g")
+              .attr("class", "focus")
+              .style("display", "none");
+
+          focus.append("circle")
+              .attr("r", 5);
+
+          focus.append("rect")
+              .attr("class", "tooltip")
+              .attr("width", 100)
+              .attr("height", 70)
+              .attr("x", 10)
+              .attr("y", -22)
+              .attr("rx", 4)
+              .attr("ry", 4);
+
+          focus.append("text")
+              .attr("class", "tooltip-date")
+              .attr("x", 18)
+              .attr("y", -2);
+
+          focus.append("text")
+              .attr("x", 18)
+              .attr("y", 18)
+              .text("Low:");
+
+          focus.append("text")
+              .attr("class", "tooltip-Close")
+              .attr("x", 60)
+              .attr("y", 18);
+
+
+                        focus.append("text")
+                            .attr("x", 18)
+                            .attr("y", 40)
+                            .text("High:");
+
+              focus.append("text")
+                  .attr("class", "tooltip-High")
+                  .attr("x", 60)
+                  .attr("y", 40);
+
+
+          svg.append("rect")
+              .attr("class", "overlay")
+              .attr("width", width)
+              .attr("height", height)
+              .on("mouseover", function() { focus.style("display", null); })
+              .on("mouseout", function() { focus.style("display", "none"); })
+              .on("mousemove", mousemove);
+
+          function mousemove() {
+              var x0 = x.invert(d3.mouse(this)[0]),
+                  i = bisectDate(data, x0, 1),
+                  d0 = data[i - 1],
+                  d1 = data[i],
+                  d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+              focus.attr("transform", "translate(" + x(d.date) + "," + y(d.Close) + ")");
+              focus.select(".tooltip-date").text(dateFormatter(d.date));
+              focus.select(".tooltip-Close").text(formatValue(d.Low));
+              focus.select(".tooltip-High").text(formatValue(d.High));
+          }
+
+
+          svg.append("text")
+             .attr("x", 520)
+             .attr("y", -30)
+             .attr("transform", "translate(" + (margin.left + 5) + "," + (margin.top - 5) + ")")
+             .text("Maximum Closing Price: $120.72");
+
+          var maxRate = data.filter(function(d) {
+
+          var max = d3.max(data, function(d) { return d.Close });
+            if(d.Close == max) {
+              return d.Close;
+            }
+          });
+
+         svg.append("line")
+               .attr("class", "mean-line")
+               .attr("x1", 0)
+               .attr("x2", (width))
+               .attr("y1", yScale(max))
+               .attr("y2", yScale(max));
+
+
+          var maxRateX = xScale(maxRate[0].date),
+              maxRateY = yScale(maxRate[0].Close);
+
+      });
+
+  </script>
+  </body>
+</html>

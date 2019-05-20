@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercise Portfolio</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <style>
+
+      body {
+        color: #222;
+      }
+
+      circle {
+        fill: rgba(204,60,45,0.8);
+        stroke: rgb(204,60,45);
+        stroke-width: 2px;
+      }
+
+      text {
+        font-family: sans-serif;
+        font-size: 10px;
+      }
+
+      .data-line {
+        fill: none;
+        stroke: rgb(85,174,243);
+        stroke-width: 1px;
+      }
+
+      .mean-line {
+        fill: none;
+        stroke: rgb(204,60,45);
+        stroke-dasharray: 4,4;
+      }
+
+      .note-line {
+        stroke: #666;
+        stroke-width: 1px;
+      }
+
+    </style>
+
+  <body>
+
+    <header>
+      <!-- ADD YOUR NAME -->
+      <h1>MACKENZIE MILLER: Exercise Portfolio</h1>
+    </header>
+
+    <div id="content">
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Return to Main Page</a></li>
+        </ul>
+      </nav>
+
+      <main>
+
+        <h2>Line Chart</h2>
+
+        <p>This line chart depicts the average closing price for Google from 2004 to 2018 by month, with several key events highlighted.</p>
+
+        <!-- ADD YOUR VISUALIZATION HERE -->
+
+      </main>
+    </div>
+
+    <script src="js/d3.min.js"></script>
+    <script>
+
+        d3.csv("data/GOOG.csv").then(function(data) {
+
+          var timeParser = d3.timeParse("%Y-%m-%d");
+
+          data.forEach(function(d) {
+            d.Date = timeParser(d.Date);
+            d.close = +d.close;
+          });
+
+          var w = window.innerWidth,
+              h = window.innerHeight;
+
+          var margin = {
+            top: 60,
+            right: 60,
+            bottom: 60,
+            left: 60
+          };
+
+          var svg = d3.select("body").append("svg");
+
+          svg.attr("width", w - margin.right)
+             .attr("height", h);
+
+          var xScale = d3.scaleTime()
+            .domain(d3.extent(data, function(d) { return d.Date } ))
+            .range([0, (w - margin.left - margin.right)]);
+
+          var yScale = d3.scaleLinear()
+            .domain(d3.extent(data, function(d) { return d.close }))
+            .range([(h - margin.top - margin.bottom), 0])
+
+          var line = d3.line()
+            .x(function(d) { return xScale(d.Date); } )
+            .y(function(d) { return yScale(d.close); } );
+
+          svg.append("g")
+             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+             .append("path")
+             .datum(data)
+             .attr("class", "data-line")
+             .attr("d", line);
+
+          var xAxis = d3.axisBottom()
+            .scale(xScale)
+            .ticks(10);
+
+          var yAxis = d3.axisLeft()
+            .scale(yScale)
+            .ticks(10);
+
+          svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + (h - margin.bottom) + ")")
+            .attr("class", "xaxis")
+            .call(xAxis);
+
+          svg.append("g")
+             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+             .attr("class", "yaxis")
+             .call(yAxis);
+
+
+           svg.append("text")
+             .attr("class", "y label")
+             .attr("text-anchor", "end")
+             .attr("y", 6)
+             .attr("dy", ".75em")
+             .attr("transform", "rotate(-90)")
+             .attr("x", -290)
+             .text("Closing Price (in Dollars)");
+
+             svg.append("text")
+                .attr("x", 900)
+                .attr("y", 3)
+                .attr("transform", "translate(" + (margin.left + 5) + "," + (margin.top - 5) + ")")
+                .text("Maximum Closing Price: $1,218.19");
+
+                var circle1 = svg.append("circle")
+                        .attr("cx", 65)
+                        .attr("cy", 682)
+                        .attr("r", 5);
+
+                        svg.append("text")
+                           .attr("x", 400)
+                           .attr("y", 610)
+                           .text("Android: September 2008");
+
+                        var circle2 = svg.append("circle")
+                                .attr("cx", 235)
+                                .attr("cy", 600)
+                                .attr("r", 5);
+
+                                svg.append("text")
+                                   .attr("x", 240)
+                                   .attr("y", 620)
+                                   .text("Acquired YouTube: October 2006");
+
+                        var circle3 = svg.append("circle")
+                                .attr("cx", 405)
+                                .attr("cy", 620)
+                                .attr("r", 5);
+
+                                svg.append("text")
+                                   .attr("x", 80)
+                                   .attr("y", 685)
+                                   .text("IPO: August 2004");
+
+                                   var circle4 = svg.append("circle")
+                                           .attr("cx", 1240)
+                                           .attr("cy", 130)
+                                           .attr("r", 5);
+
+                                           svg.append("text")
+                                              .attr("x", 1080)
+                                              .attr("y", 120)
+                                              .text("New York Times exposé: October 2018");
+
+
+          var maxRate = data.filter(function(d) {
+
+          var max = d3.max(data, function(d) { return d.close });
+            if(d.close == max) {
+              return d.close;
+            }
+          });
+
+
+
+
+          svg.append("line")
+               .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+               .attr("class", "mean-line")
+               .attr("x1", 0)
+               .attr("x2", (w - margin.left - margin.right))
+               .attr("y1", yScale(max))
+               .attr("y2", yScale(max));
+
+
+          var maxRateX = xScale(maxRate[0].Date),
+              maxRateY = yScale(maxRate[0].close);
+
+
+        });
+
+      </script>
+  </body>
+</html>
