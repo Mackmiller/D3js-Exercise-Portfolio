@@ -70,6 +70,10 @@
     <script src="js/d3.min.js"></script>
     <script>
 
+      var Events = new Array();
+      var EventDate = new Array();
+      var FinalFormat = d3.timeFormat("%B %Y");
+
         d3.csv("data/GOOG.csv").then(function(data) {
 
           var timeParser = d3.timeParse("%Y-%m-%d");
@@ -78,6 +82,12 @@
             d.Date = timeParser(d.Date);
             d.close = +d.close;
           });
+
+        EventDate.push(FinalFormat(timeParser("2008-09-01")));
+        EventDate.push(FinalFormat(timeParser("2006-10-01")));
+        EventDate.push(FinalFormat(timeParser("2004-08-01")));
+        EventDate.push(FinalFormat(timeParser("2018-10-01")));
+
 
           var w = window.innerWidth,
               h = window.innerHeight;
@@ -147,45 +157,44 @@
                 .attr("transform", "translate(" + (margin.left + 5) + "," + (margin.top - 5) + ")")
                 .text("Maximum Closing Price: $1,218.19");
 
-                var circle1 = svg.append("circle")
-                        .attr("cx", 65)
-                        .attr("cy", 682)
-                        .attr("r", 5);
-
-                        svg.append("text")
-                           .attr("x", 400)
-                           .attr("y", 610)
-                           .text("Android: September 2008");
-
-                        var circle2 = svg.append("circle")
-                                .attr("cx", 235)
-                                .attr("cy", 600)
-                                .attr("r", 5);
-
+//circles
+                var circles = svg.selectAll("circle")
+                                .data(data)
+                                .enter()
+                                .filter(function(d) {
+                                    if (EventDate.indexOf(FinalFormat(d.Date))>-1) {
+                                          return d;
+                                      }
+                                  })
+                                .append("circle")
+                                .attr("cx", function(d){
+                                  return xScale(d.Date)+60;
+                                })
+                                .attr("cy", function(d){
+                                  return yScale(d.close)+60;
+                                })
+                                .attr("r", 5)
+                                .attr("fill","red");
+//text
                                 svg.append("text")
-                                   .attr("x", 240)
-                                   .attr("y", 620)
-                                   .text("Acquired YouTube: October 2006");
-
-                        var circle3 = svg.append("circle")
-                                .attr("cx", 405)
-                                .attr("cy", 620)
-                                .attr("r", 5);
-
-                                svg.append("text")
-                                   .attr("x", 80)
-                                   .attr("y", 685)
+                                   .attr("x", 75)
+                                   .attr("y", 675)
                                    .text("IPO: August 2004");
 
-                                   var circle4 = svg.append("circle")
-                                           .attr("cx", 1240)
-                                           .attr("cy", 130)
-                                           .attr("r", 5);
+                                   svg.append("text")
+                                      .attr("x", 175)
+                                      .attr("y", 565)
+                                      .text("Acquired YouTube: October 2006");
 
-                                           svg.append("text")
-                                              .attr("x", 1080)
-                                              .attr("y", 120)
-                                              .text("New York Times exposé: October 2018");
+                                      svg.append("text")
+                                         .attr("x", 385)
+                                         .attr("y", 585)
+                                         .text("Android: September 2008");
+
+                                         svg.append("text")
+                                            .attr("x", 1140)
+                                            .attr("y", 155)
+                                            .text("New York Times exposé: October 2018");
 
 
           var maxRate = data.filter(function(d) {
