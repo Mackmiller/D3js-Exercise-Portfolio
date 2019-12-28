@@ -75,6 +75,10 @@
     <script src="js/d3.min.js"></script>
     <script>
 
+    var Events = new Array();
+    var EventDate = new Array();
+    var FinalFormat = d3.timeFormat("%B %Y");
+
           d3.csv("data/AMZN.csv").then(function(data) {
 
             var timeParser = d3.timeParse("%Y-%m-%d");
@@ -83,6 +87,12 @@
               d.Date = timeParser(d.Date);
               d.Close = +d.Close;
             });
+
+            EventDate.push(FinalFormat(timeParser("1997-05-01")));
+            EventDate.push(FinalFormat(timeParser("2004-01-01")));
+            EventDate.push(FinalFormat(timeParser("2017-08-01")));
+            EventDate.push(FinalFormat(timeParser("2018-09-01")));
+
 
             var w = window.innerWidth,
                 h = window.innerHeight;
@@ -157,45 +167,48 @@
                     .attr("transform", "translate(" + (margin.left + 5) + "," + (margin.top - 5) + ")")
                     .text("Maximum Closing Price: $2,012.71");
 
-                    var circle1 = svg.append("circle")
-                            .attr("cx", 68)
-                            .attr("cy", 688)
-                            .attr("r", 5);
+                    //circles
+                                    var circles = svg.selectAll("circle")
+                                                    .data(data)
+                                                    .enter()
+                                                    .filter(function(d) {
+                                                        if (EventDate.indexOf(FinalFormat(d.Date))>-1) {
+                                                              return d;
+                                                          }
+                                                      })
+                                                    .append("circle")
+                                                    .attr("cx", function(d){
+                                                      return xScale(d.Date)+60;
+                                                    })
+                                                    .attr("cy", function(d){
+                                                      return yScale(d.Close)+60;
+                                                    })
+                                                    .attr("r", 5)
+                                                    .attr("fill","red");
+                    //text
+                                                    svg.append("text")
+                                                       .attr("x", 75)
+                                                       .attr("y", 675)
+                                                       .text("May 1997: Initial public offering");
 
-                            svg.append("text")
-                               .attr("x", 935)
-                               .attr("y", 380)
-                               .text("August 2017: Amazon acquires Whole Foods Market");
+                                                       svg.append("text")
+                                                          .attr("x", 375)
+                                                          .attr("y", 645)
+                                                          .text("Jan 2004: First profitable year");
 
-                            var circle2 = svg.append("circle")
-                                    .attr("cx", 428)
-                                    .attr("cy", 675)
-                                    .attr("r", 5);
+                                                          svg.append("text")
+                                                             .attr("x", 1085)
+                                                             .attr("y", 395)
+                                                             .text("Aug 2017: Acquires Whole Foods Market");
 
-                                    svg.append("text")
-                                       .attr("x", 420)
-                                       .attr("y", 660)
-                                       .text("January 2004: Amazon reports first profitable year.");
+                                                             svg.append("text")
+                                                                .attr("x", 1140)
+                                                                .attr("y", 80)
+                                                                .text("Sept 2018: Becomes a trillion-dollar company");
 
-                            var circle3 = svg.append("circle")
-                                    .attr("cx", 1177)
-                                    .attr("cy", 380)
-                                    .attr("r", 5);
 
-                                    svg.append("text")
-                                       .attr("x", 80)
-                                       .attr("y", 675)
-                                       .text("May 1997: Initial public offering (IPO)");
 
-                                       var circle4 = svg.append("circle")
-                                               .attr("cx", 1245)
-                                               .attr("cy", 65)
-                                               .attr("r", 5);
 
-                                               svg.append("text")
-                                                  .attr("x", 975)
-                                                  .attr("y", 85)
-                                                  .text("September 2018: Amazon becomes a trillion-dollar company");
 
            var maxRate = data.filter(function(d) {
 
