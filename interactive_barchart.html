@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 
 <html>
-
 <head>
-<title>updating a bar chart with d3.js (v4)</title>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<link rel="stylesheet" href="css/style">
+<title>Exercise Portfolio</title>
+<link href="css/style.css" rel="stylesheet" />
 </head>
 
 <style>
@@ -19,16 +17,39 @@
 
 <body>
 
+	<header>
+		<!-- ADD YOUR NAME -->
+		<h1>MACKENZIE MILLER: Exercise Portfolio</h1>
+	</header>
+
+	<div id="content">
+
+		<nav>
+			<ul>
+				<li><a href="index.html">Return to Main Page</a></li>
+			</ul>
+		</nav>
+
+		<main>
+
+			<h2>Interactive Line Chart</h2>
+
+			<p>This interactive line chart displays the closing cost of Walt Disney Company stock from 1962 to 2019. </p>
+
+			<!-- ADD YOUR VISUALIZATION HERE -->
+		</main>
+		</div>
+
 <div class='container'>
 	<div class='row'>
-	<h2> watch time vs. age group</h2>
-				<p>total time watched: 1411 minutes</p>
+	<h2> MLB Spring Training</h2>
+				<p>Cactus vs. Grapefruit</p>
 					<div class='radio'>
 						<label class='radio-inline'>
-							<input type="radio" name="gender" value="male" onclick='change(this.value)'> male
+							<input type="radio" name="gender" value="GRAPEFRUIT" onclick='change(this.value)'> GRAPEFRUIT
 						</label>
 						<label class='radio-inline'>
-							<input type="radio" name="gender" value="female" onclick='change(this.value)'> female
+							<input type="radio" name="gender" value="CACTUS" onclick='change(this.value)'> CACTUS
 						</label>
 						<label class='radio-inline'>
 							<input type="radio" name="gender" value="both" onclick='change(this.value)' checked > both
@@ -41,181 +62,217 @@
 </body>
 
 
-
+<script src="js/d3.min.js"></script>
 <script>
-//set up data
-var bothData = [
+
+//data
+var Both = [
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_13_17",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "3.3",
-    "watch_time_minutes": "2.8"
+    "team_league": "CACTUS",
+    "team_name": "Chi Cubs",
+    "wins": "19"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_13_17",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "12.8",
-    "watch_time_minutes": "13.5"
+    "team_league": "CACTUS",
+    "team_name": "Milwaukee",
+    "wins": "19"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_18_24",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "7.1",
-    "watch_time_minutes": "6.6"
+    "team_league": "CACTUS",
+    "team_name": "Kansas City",
+    "wins": "18"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_18_24",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "37.1",
-    "watch_time_minutes": "35.8"
+    "team_league": "CACTUS",
+    "team_name": "San Diego",
+    "wins": "18"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_25_34",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "2.7",
-    "watch_time_minutes": "3.9"
+    "team_league": "CACTUS",
+    "team_name": "Cleveland",
+    "wins": "17"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "LA Angels",
+    "wins": "15"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Colorado",
+    "wins": "14"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "LA Dodgers",
+    "wins": "14"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Oakland",
+    "wins": "14"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "San Francisco",
+    "wins": "13"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Texas",
+    "wins": "13"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Arizona",
+    "wins": "12"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Chi White Sox",
+    "wins": "12"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Seattle",
+    "wins": "10"
+  },
+	{
+    "team_league": "CACTUS",
+    "team_name": "Cincinnati",
+    "wins": "8"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_25_34",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "23.5",
-    "watch_time_minutes": "24.7"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Houston",
+    "wins": "18"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_35_44",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "1.0",
-    "watch_time_minutes": "0.8"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "NY Yankees",
+    "wins": "17"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_35_44",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "6.4",
-    "watch_time_minutes": "5.0"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Washington",
+    "wins": "17"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_45_54",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "0.7",
-    "watch_time_minutes": "1.3"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Atlanta",
+    "wins": "16"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_45_54",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "3.3",
-    "watch_time_minutes": "3.4"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Detroit",
+    "wins": "15"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_55_64",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "0.1",
-    "watch_time_minutes": "0.1"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Miami",
+    "wins": "15"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_55_64",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "0.8",
-    "watch_time_minutes": "0.7"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Pittsburgh",
+    "wins": "15"
   },
   {
-    "viewer_gender": "FEMALE",
-    "viewer_age": "AGE_65_",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "0.2",
-    "watch_time_minutes": "0.2"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Minnesota",
+    "wins": "14"
   },
   {
-    "viewer_gender": "MALE",
-    "viewer_age": "AGE_65_",
-    "channel_display_name": "syncopika",
-    "channel_id": "T2NUI3KLGK6sDILFbzUZZg",
-    "views": "1.1",
-    "watch_time_minutes": "1.3"
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Philadelphia",
+    "wins": "14"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Toronto",
+    "wins": "14"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "NY Mets",
+    "wins": "13"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Tampa Bay",
+    "wins": "13"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Baltimore",
+    "wins": "12"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "Boston",
+    "wins": "12"
+  },
+  {
+    "team_league": "GRAPEFRUIT",
+    "team_name": "St. Louis",
+    "wins": "12"
   }
 ];
 
-var maleData = [];
-var femaleData = [];
+var GRAPEFRUITData = [];
+var CACTUSData = [];
 
-for(var i = 0; i < bothData.length; i++){
-	if(bothData[i]["viewer_gender"] === "MALE"){
-		maleData.push(bothData[i]);
+for(var i = 0; i < Both.length; i++){
+	if(Both[i]["team_league"] === "GRAPEFRUIT"){
+		GRAPEFRUITData.push(Both[i]);
 	}else{
-		femaleData.push(bothData[i]);
+		CACTUSData.push(Both[i]);
 	}
 }
 
-//functions for toggling between data
 function change(value){
 
-	if(value === 'male'){
-		update(maleData);
-	}else if(value === 'female'){
-		update(femaleData);
+	if(value === 'GRAPEFRUIT'){
+		update(GRAPEFRUITData);
+	}else if(value === 'CACTUS'){
+		update(CACTUSData);
 	}else{
-		update(bothData);
+		update(Both);
 	}
 }
 
 function update(data){
-	//set domain for the x axis
-	xChart.domain(data.map(function(d){ return d.viewer_age; }) );
-	//set domain for y axis
-	yChart.domain( [0, d3.max(data, function(d){ return +d.watch_time_minutes; })] );
+	
+//x axis
+	xChart.domain(data.map(function(d){ return d.team_name; }) );
+//yaxis
+	yChart.domain( [0, d3.max(data, function(d){ return +d.wins; })] );
 
-	//get the width of each bar
 	var barWidth = width / data.length;
 
-	//select all bars on the graph, take them out, and exit the previous data set.
-	//then you can add/enter the new data set
 	var bars = chart.selectAll(".bar")
 					.remove()
 					.exit()
 					.data(data)
-	//now actually give each rectangle the corresponding data
+
 	bars.enter()
 		.append("rect")
 		.attr("class", "bar")
 		.attr("x", function(d, i){ return i * barWidth + 1 })
-		.attr("y", function(d){ return yChart( d.watch_time_minutes); })
-		.attr("height", function(d){ return height - yChart(d.watch_time_minutes); })
+		.attr("y", function(d){ return yChart( d.wins); })
+		.attr("height", function(d){ return height - yChart(d.wins); })
 		.attr("width", barWidth - 1)
 		.attr("fill", function(d){
-			if(d.viewer_gender === "FEMALE"){
+			if(d.team_league === "CACTUS"){
 				return "rgb(251,180,174)";
 			}else{
 				return "rgb(179,205,227)";
 			}
 		});
-	//left axis
+
 	chart.select('.y')
 		  .call(yAxis)
-	//bottom axis
+
 	chart.select('.xAxis')
 		.attr("transform", "translate(0," + height + ")")
 		.call(xAxis)
@@ -227,9 +284,8 @@ function update(data){
 				return "rotate(-65)";
 			});
 
-}//end update
+}
 
-//set up chart
 var margin = {top: 20, right: 20, bottom: 95, left: 50};
 var width = 800;
 var height = 500;
@@ -249,13 +305,12 @@ var yChart = d3.scaleLinear()
 var xAxis = d3.axisBottom(xChart);
 var yAxis = d3.axisLeft(yChart);
 
-//set up axes
-//left axis
+
 	chart.append("g")
 		  .attr("class", "y axis")
 		  .call(yAxis)
 
-	//bottom axis
+
 	chart.append("g")
 		.attr("class", "xAxis")
 		.attr("transform", "translate(0," + height + ")")
@@ -268,19 +323,19 @@ var yAxis = d3.axisLeft(yChart);
 				return "rotate(-65)";
 			});
 
-//add labels
+
 chart
 	.append("text")
 	.attr("transform", "translate(-35," +  (height+margin.bottom)/2 + ") rotate(-90)")
-	.text("% of total watch time");
+	.text("Number of wins");
 
 chart
 	.append("text")
 	.attr("transform", "translate(" + (width/2) + "," + (height + margin.bottom - 5) + ")")
-	.text("age group");
+	.text("Team");
 
-//use bothData to begin with
-update(bothData);
+
+update(Both);
 </script>
 
 </html>

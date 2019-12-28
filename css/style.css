@@ -26,12 +26,8 @@ header h1 {
   margin-left: 8px;
 }
 
-div {
-  background-color: navy;
-  color: white;
-  padding: 5px 2px 0 2px;
-  margin: 4px;
-}
+
+
 
 #content {
   margin-top: 100px;
