@@ -32,9 +32,9 @@
 
 		<main>
 
-			<h2>Interactive Line Chart</h2>
+			<h2>Interactive Bar Chart</h2>
 
-			<p>This interactive line chart displays the closing cost of Walt Disney Company stock from 1962 to 2019. </p>
+			<p>This interactive line chart displays the number of wins of for all the teams who played on the Grapefruit and Cactus teams during MLB Spring Training. </p>
 
 			<!-- ADD YOUR VISUALIZATION HERE -->
 		</main>
@@ -242,7 +242,7 @@ function change(value){
 }
 
 function update(data){
-	
+
 //x axis
 	xChart.domain(data.map(function(d){ return d.team_name; }) );
 //yaxis
