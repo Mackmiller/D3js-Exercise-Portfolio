@@ -72,9 +72,9 @@
     <script src="js/d3.min.js"></script>
     <script>
 
-    
+
       var ImportantDates = new Array();
-      var FinalFormat = d3.timeFormat("%B %Y");
+      var TimeLayout = d3.timeFormat("%B %Y");
 
         d3.csv("data/GOOG.csv").then(function(data) {
 
@@ -85,10 +85,10 @@
             d.close = +d.close;
           });
 
-        ImportantDates.push(FinalFormat(timeParser("2008-09-01")));
-        ImportantDates.push(FinalFormat(timeParser("2006-10-01")));
-        ImportantDates.push(FinalFormat(timeParser("2004-08-01")));
-        ImportantDates.push(FinalFormat(timeParser("2018-10-01")));
+        ImportantDates.push(TimeLayout(timeParser("2008-09-01")));
+        ImportantDates.push(TimeLayout(timeParser("2006-10-01")));
+        ImportantDates.push(TimeLayout(timeParser("2004-08-01")));
+        ImportantDates.push(TimeLayout(timeParser("2018-10-01")));
 
           var w = 800,
               h = 800;
@@ -163,7 +163,7 @@
                                 .data(data)
                                 .enter()
                                 .filter(function(d) {
-                                    if (ImportantDates.indexOf(FinalFormat(d.Date))>-1) {
+                                    if (ImportantDates.indexOf(TimeLayout(d.Date))>-1) {
                                           return d;
                                       }
                                   })

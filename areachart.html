@@ -77,7 +77,7 @@
 
 
     var ImportantDates = new Array();
-    var FinalFormat = d3.timeFormat("%B %Y");
+    var TimeLayout = d3.timeFormat("%B %Y");
 
           d3.csv("data/AMZN.csv").then(function(data) {
 
@@ -88,10 +88,10 @@
               d.Close = +d.Close;
             });
 
-            ImportantDates.push(FinalFormat(timeParser("1997-05-01")));
-            ImportantDates.push(FinalFormat(timeParser("2004-01-01")));
-            ImportantDates.push(FinalFormat(timeParser("2017-08-01")));
-            ImportantDates.push(FinalFormat(timeParser("2018-09-01")));
+            ImportantDates.push(TimeLayout(timeParser("1997-05-01")));
+            ImportantDates.push(TimeLayout(timeParser("2004-01-01")));
+            ImportantDates.push(TimeLayout(timeParser("2017-08-01")));
+            ImportantDates.push(TimeLayout(timeParser("2018-09-01")));
 
 
             var w = 800,
@@ -172,7 +172,7 @@
                                                     .data(data)
                                                     .enter()
                                                     .filter(function(d) {
-                                                        if (ImportantDates.indexOf(FinalFormat(d.Date))>-1) {
+                                                        if (ImportantDates.indexOf(TimeLayout(d.Date))>-1) {
                                                               return d;
                                                           }
                                                       })
