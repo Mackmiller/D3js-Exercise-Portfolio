@@ -71,7 +71,7 @@
     <script>
 
       var Events = new Array();
-      var EventDate = new Array();
+      var ImportantDates = new Array();
       var FinalFormat = d3.timeFormat("%B %Y");
 
         d3.csv("data/GOOG.csv").then(function(data) {
@@ -83,14 +83,13 @@
             d.close = +d.close;
           });
 
-        EventDate.push(FinalFormat(timeParser("2008-09-01")));
-        EventDate.push(FinalFormat(timeParser("2006-10-01")));
-        EventDate.push(FinalFormat(timeParser("2004-08-01")));
-        EventDate.push(FinalFormat(timeParser("2018-10-01")));
+        ImportantDates.push(FinalFormat(timeParser("2008-09-01")));
+        ImportantDates.push(FinalFormat(timeParser("2006-10-01")));
+        ImportantDates.push(FinalFormat(timeParser("2004-08-01")));
+        ImportantDates.push(FinalFormat(timeParser("2018-10-01")));
 
-
-          var w = window.innerWidth,
-              h = window.innerHeight;
+          var w = 800,
+              h = 800;
 
           var margin = {
             top: 60,
@@ -152,7 +151,7 @@
              .text("Closing Price (in Dollars)");
 
              svg.append("text")
-                .attr("x", 900)
+                .attr("x", 100)
                 .attr("y", 3)
                 .attr("transform", "translate(" + (margin.left + 5) + "," + (margin.top - 5) + ")")
                 .text("Maximum Closing Price: $1,218.19");
@@ -162,7 +161,7 @@
                                 .data(data)
                                 .enter()
                                 .filter(function(d) {
-                                    if (EventDate.indexOf(FinalFormat(d.Date))>-1) {
+                                    if (ImportantDates.indexOf(FinalFormat(d.Date))>-1) {
                                           return d;
                                       }
                                   })
@@ -175,25 +174,26 @@
                                 })
                                 .attr("r", 5)
                                 .attr("fill","red");
+
 //text
                                 svg.append("text")
                                    .attr("x", 75)
-                                   .attr("y", 675)
+                                   .attr("y", 730)
                                    .text("IPO: August 2004");
 
                                    svg.append("text")
                                       .attr("x", 175)
-                                      .attr("y", 565)
+                                      .attr("y", 615)
                                       .text("Acquired YouTube: October 2006");
 
                                       svg.append("text")
-                                         .attr("x", 385)
-                                         .attr("y", 585)
+                                         .attr("x", 265)
+                                         .attr("y", 650)
                                          .text("Android: September 2008");
 
                                          svg.append("text")
-                                            .attr("x", 1160)
-                                            .attr("y", 155)
+                                            .attr("x", 550)
+                                            .attr("y", 170)
                                             .text("New York Times exposé: October 2018");
 
 
