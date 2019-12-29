@@ -224,7 +224,12 @@
               focus.select(".tooltip-Close").text(formatValue(d.Low));
               focus.select(".tooltip-High").text(formatValue(d.High));
           }
-
+          svg.append("text")
+              .attr("x", 450)
+              .attr("y", -20)
+              .attr("text-anchor", "middle")
+              .text("Disney Closing Stock Price 1962-2019")
+              .attr("font-weight", "bold");
 
           svg.append("text")
              .attr("x", 520)

@@ -39,6 +39,8 @@
         stroke-width: 1px;
       }
 
+
+
     </style>
 
   <body>
@@ -204,6 +206,16 @@
               return d.close;
             }
           });
+
+          svg.append("text")
+              .attr("x", 450)
+              .attr("y", 20)
+              .attr("text-anchor", "middle")
+              .text("Google Average Closing Price 2004-2018")
+              .attr("font-weight", "bold");
+
+
+
 
           svg.append("line")
                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")

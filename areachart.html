@@ -207,7 +207,12 @@
                                                                 .text("Sept 2018: Becomes a trillion-dollar company");
 
 
-
+                                                                svg.append("text")
+                                                                    .attr("x", 450)
+                                                                    .attr("y", 20)
+                                                                    .attr("text-anchor", "middle")
+                                                                    .text("Amazon Average Closing Price 1997-2019")
+                                                                    .attr("font-weight", "bold");
 
 
            var maxRate = data.filter(function(d) {
