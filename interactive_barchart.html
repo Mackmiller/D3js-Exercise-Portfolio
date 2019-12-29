@@ -46,13 +46,13 @@
 				<p>Cactus vs. Grapefruit</p>
 					<div class='radio'>
 						<label class='radio-inline'>
-							<input type="radio" name="gender" value="GRAPEFRUIT" onclick='change(this.value)'> GRAPEFRUIT
+							<input type="radio" name="league" value="GRAPEFRUIT" onclick='change(this.value)'> GRAPEFRUIT
 						</label>
 						<label class='radio-inline'>
-							<input type="radio" name="gender" value="CACTUS" onclick='change(this.value)'> CACTUS
+							<input type="radio" name="league" value="CACTUS" onclick='change(this.value)'> CACTUS
 						</label>
 						<label class='radio-inline'>
-							<input type="radio" name="gender" value="both" onclick='change(this.value)' checked > both
+							<input type="radio" name="league" value="both" onclick='change(this.value)' checked > both
 						</label>
 					</div>
 			<svg class='chart'>
@@ -264,9 +264,9 @@ function update(data){
 		.attr("width", barWidth - 1)
 		.attr("fill", function(d){
 			if(d.team_league === "CACTUS"){
-				return "rgb(251,180,174)";
+				return "rgb(99,193,135)";
 			}else{
-				return "rgb(179,205,227)";
+				return "rgb(248,207,95)";
 			}
 		});
 
@@ -317,10 +317,10 @@ var yAxis = d3.axisLeft(yChart);
 		.call(xAxis)
 		.selectAll("text")
 			.style("text-anchor", "end")
-			.attr("dx", "-.8em")
-			.attr("dy", ".15em")
+			.attr("dx", "-.7em")
+			.attr("dy", ".16em")
 			.attr("transform", function(d){
-				return "rotate(-65)";
+				return "rotate(-66)";
 			});
 
 
