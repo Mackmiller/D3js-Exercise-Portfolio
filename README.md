@@ -1,6 +1,6 @@
 # Portfolio of D3.js charts
 
-Homework upload for Advanced Data Visualization Spring 2019 at the University of Miami. Charts are derived from a set of assignment requirements and were graded on functionality and design.
+Homework upload for Advanced Data Visualization Spring 2019 at the University of Miami. Charts are derived from a set of assignment requirements and were graded on functionality and design of the Javascript.
 
 ## Data
 
